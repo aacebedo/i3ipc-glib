@@ -1,0 +1,49 @@
+sudo: required
+language: c
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -qy docker-engine
+  - docker pull ubuntu:16.04
+  - docker pull ubuntu:16.10
+  - docker pull ubuntu:17.04
+  - mkdir -p /tmp/build/ubuntu/16.04/packages
+  - mkdir -p /tmp/build/ubuntu/16.10/packages
+  - mkdir -p /tmp/build/ubuntu/17.04/packages
+
+script:
+  - |
+    docker run -v `pwd`:/mnt/data/src -v /tmp/build/ubuntu/16.04:/mnt/data/build --rm ubuntu:16.04 bash -c \
+    "apt update && \
+     apt install -y ruby ruby-dev rubygems build-essential && \
+     gem install --no-ri --no-rdoc fpm && \
+     apt install -y libxcb1-dev xcb-proto gobject-introspection libjson-glib-dev gtk-doc-tools dh-autoreconf && \
+     cd /mnt/data/src && \
+     ./autogen.sh --prefix /mnt/data/build/install && \
+     make && make install && \
+     cd /mnt/data/build/packages && \
+     fpm -s dir -t deb -n i3ipc-glib -v 0.6.0 --prefix /usr/local -C /mnt/data/build/install \
+     -d libxcb1 -d xcb-proto -d gobject-introspection -d libjson-glib-1.0-0 ."
+  - |
+    docker run -v `pwd`:/mnt/data/src -v /tmp/build/ubuntu/17.04:/mnt/data/build --rm ubuntu:17.04 bash -c \
+    "apt update && \
+     apt install -y ruby ruby-dev rubygems build-essential && \
+     gem install --no-ri --no-rdoc fpm && \
+     apt install -y libxcb1-dev xcb-proto gobject-introspection libjson-glib-dev gtk-doc-tools dh-autoreconf && \
+     cd /mnt/data/src && \
+     ./autogen.sh --prefix /mnt/data/build/install && \
+     make && make install && \
+     cd /mnt/data/build/packages && \
+     fpm -s dir -t deb -n i3ipc-glib -v 0.6.0 --prefix /usr/local -C /mnt/data/build/install \
+     -d libxcb1 -d xcb-proto -d gobject-introspection -d libjson-glib-1.0-0 ."
+
+deploy:
+  - provider: bintray
+    skip_cleanup: true
+    file: /home/travis/build/aacebedo/i3ipc-glib/bintray.desc
+    user: $BINTRAY_USERNAME
+    key: $BINTRAY_APIKEY
+    dry-run: false

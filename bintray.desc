@@ -1,0 +1,53 @@
+{
+  "package": {
+    "name": "i3ipc-glib",
+    "repo": "i3ipc-glib",
+    "subject": "aacebedo",
+    "desc": "i3ipc-glib",
+    "website_url": "https://github.com/aacebedo/i3ipc-glib",
+    "issue_tracker_url": "https://github.com/aacebedo/i3ipc-glib",
+    "vcs_url": "https://github.com/aacebedo/i3ipc-glib",
+    "github_use_tag_release_notes": true,
+    "licenses": ["GPL-3.0"],
+    "labels": ["i3","glib","ipc"],
+    "public_download_numebrs": false,
+    "public_stats": false
+  },
+  "version": {
+    "name": 0.6,
+    "desc": "i3ipc-glib",
+    "released": "2017-03-01",
+    "vcs_tag": 0.6,
+    "gpgSign": false
+  },
+  "files": [
+    {
+      "includePattern": "/tmp/build/ubuntu/16.04/packages/(.*)",
+      "uploadPattern": "xenial/$1",
+      "matrixParams": {
+        "deb_distribution": "xenial",
+        "deb_component": "main",
+        "deb_architecture": "amd64"
+      }
+    },
+    {
+      "includePattern": "/tmp/build/ubuntu/16.10/packages/(.*)",
+      "uploadPattern": "yakkety/$1",
+      "matrixParams": {
+        "deb_distribution": "yakkety",
+        "deb_component": "main",
+        "deb_architecture": "amd64"
+      }
+    },
+    {
+      "includePattern": "/tmp/build/ubuntu/17.04/packages/(.*)",
+      "uploadPattern": "zesty/$1",
+      "matrixParams": {
+        "deb_distribution": "zesty",
+        "deb_component": "main",
+        "deb_architecture": "amd64"
+      }
+    }
+  ],
+  "publish": true
+}
